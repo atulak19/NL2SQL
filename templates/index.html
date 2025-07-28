@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL Translator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:wght@700&display=swap');
+        *{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 800;
+        }
+        #title{
+            font-size : 50px;
+        }
+        body {
+            background-color: #f8f9fa;
+            background-image: url('/static/bg1.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4" id="title"><strong> NL2SQL </strong></h1>
+        <h5 class="text-center mb-3">your everyday <strong> Natural Language </strong> to <strong> SQL </strong> query translator</h5>
+        <p class="text-center text-muted">Default table : 'employees' | Ask questions about employees in plain English !</p>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Enter your query:</h5>
+                <form action="/" method="post">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="nl_query" name="nl_query" rows="3" placeholder="e.g., Show me employees from the sales department in Pune with salary greater than 70000" required>{{ user_query if user_query else '' }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Translate & Query</button>
+                </form>
+            </div>
+        </div>
+
+        {% if message %}
+        <div class="alert alert-{{ 'danger' if 'error' in message.lower() else 'info' }}" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        {% if sql_query %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Generated SQL Query:</h5>
+                <pre class="code-block"><code>{{ sql_query }}</code></pre>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Query Results:</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                {% for col in columns %}
+                                <th>{{ col }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in results %}
+                            <tr>
+                                {% for item in row %}
+                                <td>{{ item }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Try these examples:</h5>
+                <ul>
+                    <li>Show me all employees</li>
+                    <li>What is the salary of Alice Johnson?</li>
+                    <li>Employees in IT department from Mumbai</li>
+                    <li>Average salary in Sales</li>
+                    <li>Total employees in Pune city</li>
+                    <li>List all employees with salary greater than 80000</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <footer class="text-center py-3 mt-5 bg-light">
+        <div class="container">
+            <p class="mb-1">Developed by Atul Kande</p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/atul-kande" class="me-2"><i class="bi bi-linkedin"></i> LinkedIn</a>
+                <a href="https://www.github.com/atulak19" class="me-2"><i class="bi bi-github"></i> GitHub</a>
+                <a href="https://www.instagram.com/atul_kande_" class="me-2"><i class="bi bi-instagram"></i> Twitter</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
